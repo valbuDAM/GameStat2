@@ -1,0 +1,184 @@
+.page {
+  padding: 16px;
+  display: grid;
+  gap: 18px;
+}
+
+.intro-card,
+.stats-grid,
+.games-preview,
+.quick-links {
+  margin-top: 0;
+}
+
+.intro-card {
+  padding: 22px;
+  display: grid;
+  gap: 18px;
+}
+
+.intro-card h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.intro-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.intro-actions ion-button {
+  min-width: 180px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.stat-card {
+  padding: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.stat-card ion-icon {
+  font-size: 1.5rem;
+  color: var(--ion-color-primary);
+}
+
+.stat-card strong {
+  color: var(--app-text);
+  font-size: 1rem;
+}
+
+.stat-card p {
+  margin: 0;
+}
+.welcome,
+.stat,
+.quick-card {
+  padding: 18px;
+}
+.welcome {
+  margin-bottom: 20px;
+}
+.eyebrow {
+  margin: 0 0 6px;
+}
+.stat span {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.games-preview {
+  margin-top: 0;
+  padding: 18px;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.preview-header h2 {
+  margin: 4px 0 0;
+}
+
+.games-loading {
+  display: grid;
+  place-items: center;
+  padding: 20px 0;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.game-tile {
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(42, 37, 70, 0.58);
+}
+
+.game-tile img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.game-tile h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.game-tile p {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Estilos para los botones de acción
+   NOTA: el theming de botones esta en src/global.scss. Aqui solo
+   ajustamos margenes y ancho expand="block". No sobrescribimos
+   colores/backgrounds para no romper la coherencia visual. */
+.action-button {
+  margin-top: 12px;
+}
+
+ion-button[expand="block"] {
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 12px;
+  }
+
+  .intro-card,
+  .games-preview,
+  .quick-card {
+    padding: 16px;
+  }
+
+  .preview-header,
+  .intro-actions {
+    flex-direction: column;
+  }
+
+  .intro-actions ion-button,
+  .preview-header ion-button {
+    width: 100%;
+  }
+
+  .stats-grid,
+  .quick-links {
+    grid-template-columns: 1fr;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+}

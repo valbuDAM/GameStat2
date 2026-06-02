@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">GameStat</string>
+    <string name="title_activity_main">GameStat</string>
+    <string name="package_name">com.gamestat.app</string>
+    <string name="custom_url_scheme">com.gamestat.app</string>
+</resources>

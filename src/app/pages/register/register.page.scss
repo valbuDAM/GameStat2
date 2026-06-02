@@ -1,0 +1,211 @@
+.auth-layout {
+  /* Paleta oscura "Orfa" (scope local) */
+  --ion-color-primary: #4c1d95;
+  --ion-color-primary-rgb: 76,29,149;
+  --ion-color-secondary: #8b5cf6;
+  --auth-bg: #070812;
+
+  padding: 24px 16px 44px;
+  display: grid;
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.auth-hero,
+.auth-card {
+  border-radius: 12px;
+}
+
+.auth-hero {
+  padding: 28px 24px;
+  margin-top: 18px;
+  background: linear-gradient(135deg, var(--auth-bg) 0%, rgba(var(--ion-color-primary-rgb),0.06) 45%, rgba(var(--ion-color-primary-rgb),0.04) 100%);
+  position: relative;
+  color: #fff;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+}
+
+.auth-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.25));
+  pointer-events: none;
+}
+
+.eyebrow {
+  color: var(--ion-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.auth-hero h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  margin: 0 0 14px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.auth-hero .lead{ color: rgba(255,255,255,0.95); margin-bottom:20px; font-size:15px}
+
+.hero-badges{ display:flex; gap:12px; margin-top:20px}
+.hero-badges .badge{ background: rgba(255,255,255,0.06); padding:10px 14px; border-radius:999px; font-size:13px; color:var(--ion-color-secondary); font-weight:600}
+
+/* make card text and labels more legible */
+.auth-card,
+.auth-card * {
+  color: rgba(255,255,255,0.95);
+}
+
+.auth-card ion-label {
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+}
+
+.auth-card ion-input {
+  color: rgba(255,255,255,0.95);
+}
+
+.form-item::part(native) {
+  color: rgba(255,255,255,0.95);
+}
+
+.hero-inner{ max-width:560px }
+
+.auth-hero p,
+.helper,
+.muted {
+  color: var(--app-text-muted);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.auth-card {
+  padding: 24px;
+  background: rgba(8,10,14,0.92);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 18px 50px rgba(2,6,23,0.6);
+  border-radius: 18px;
+}
+
+.auth-card h2 {
+  margin: 0 0 6px;
+}
+
+.helper {
+  margin: 0 0 16px;
+}
+
+.form-item {
+  --background: rgba(255,255,255,0.02);
+  --border-color: rgba(255,255,255,0.04);
+  --highlight-color-focused: var(--ion-color-primary);
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  padding: 8px 0;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+ion-item.form-item {
+  border: none;
+  padding: 12px 14px;
+}
+
+ion-input::part(native) {
+  background: transparent;
+  color: rgba(255,255,255,0.96);
+  font-size: 15px;
+  height: 44px;
+  padding: 6px 0;
+}
+
+.auth-card ion-label { font-weight:600; color: rgba(255,255,255,0.9) }
+
+.primary-gradient { padding: 12px 16px; font-weight:700 }
+
+.primary-gradient {
+  --background: #7c3aed;
+  --background-activated: #6d28d9;
+  --background-focused: #6d28d9;
+  --border-radius: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --color: #ffffff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  border: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-card ion-button[expand='block'] {
+  margin-top: 14px;
+}
+
+.feedback {
+  margin: 12px 0 0;
+}
+
+.muted {
+  margin: 16px 0 0;
+}
+
+.muted a {
+  color: var(--ion-color-secondary);
+}
+
+.primary-gradient::part(native) {
+  background: transparent !important;
+}
+
+@media (min-width: 920px) {
+  .auth-layout {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: start;
+    padding: 32px 24px 56px;
+  }
+
+  .auth-card {
+    margin-top: 24px;
+  }
+
+  .auth-hero {
+    padding: 48px 40px;
+    min-height: 420px;
+  }
+
+  .auth-card {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 680px) {
+  .hero-badges {
+    flex-direction: column;
+  }
+
+  .auth-card ion-button[expand='block'] {
+    width: 100%;
+  }
+}

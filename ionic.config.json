@@ -1,0 +1,7 @@
+{
+  "name": "gamestat",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,168 @@
+.social-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 20px;
+  min-height: calc(100vh - 40px);
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hub-card,
+.people-card {
+  padding: 18px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 14px;
+  min-height: 0;
+}
+
+.hub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow {
+  margin: 0;
+}
+
+.conversation-list,
+.users-list {
+  background: transparent;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.empty {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 14px;
+}
+
+.search-item ion-input {
+  --background: transparent;
+}
+
+.group-modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 2, 10, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.group-modal {
+  width: min(560px, 100%);
+  max-height: min(680px, calc(100vh - 40px));
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.group-modal-header,
+.group-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.group-modal-header h2,
+.group-modal-header p {
+  margin: 0;
+}
+
+.group-member-list {
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.member-list-title {
+  margin: 0 0 2px;
+  color: var(--app-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.group-member-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(196, 181, 253, 0.16);
+  border-radius: 10px;
+  background: rgba(42, 37, 70, 0.58);
+  color: var(--app-text);
+  cursor: pointer;
+}
+
+.group-member-row strong,
+.group-member-row small {
+  display: block;
+}
+
+.group-member-row strong {
+  color: var(--app-text);
+  font-size: 14px;
+}
+
+.group-member-row small {
+  margin-top: 2px;
+  color: var(--app-text-soft);
+  font-size: 12px;
+}
+
+.group-member-row ion-checkbox {
+  --checkbox-background: rgba(20, 18, 35, 0.9);
+  --checkbox-background-checked: var(--ion-color-primary);
+  --border-color: rgba(196, 181, 253, 0.5);
+  --border-color-checked: var(--ion-color-primary);
+  --checkmark-color: #10091f;
+}
+
+@media (max-width: 640px) {
+  .social-shell {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 12px;
+  }
+
+  .group-modal-backdrop {
+    padding: 12px;
+  }
+
+  .group-modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}

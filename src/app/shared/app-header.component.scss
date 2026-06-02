@@ -1,0 +1,192 @@
+/* ===================================================================
+   Top bar global de GameStat.
+
+   Layout:
+   - position: fixed sobre el viewport.
+   - Mobile (< 768px): ocupa todo el ancho.
+   - Desktop (>= 768px): empieza despues de la sidebar (left: 118px /
+     96px en breakpoint medio).
+   - Altura visible: 56px + safe-area-inset-top para iPhone notch.
+   =================================================================== */
+
+:host {
+  display: contents;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200; /* por encima del sidebar (z-index: 100) */
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  height: calc(56px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 14px 0 14px;
+
+  background: linear-gradient(180deg, rgba(15, 13, 29, 0.86) 0%, rgba(12, 10, 22, 0.72) 100%);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid rgba(196, 181, 253, 0.14);
+  box-shadow: 0 8px 24px rgba(3, 2, 10, 0.32);
+  pointer-events: auto;
+}
+
+/* ---------- Branding ---------- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--app-text);
+  padding: 6px 10px 6px 6px;
+  border-radius: 12px;
+  transition: background 0.2s ease, transform 0.18s ease;
+  min-width: 0;
+}
+
+.brand:hover {
+  background: rgba(167, 139, 250, 0.10);
+}
+
+.brand:active {
+  transform: scale(0.97);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 60%, #7c3aed 100%);
+  color: #10091f;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
+  flex-shrink: 0;
+}
+
+.brand-mark ion-icon {
+  font-size: 20px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 0;
+}
+
+.brand-name {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--app-text);
+  background: linear-gradient(135deg, #f4f0ff 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--app-text-soft);
+}
+
+@media (max-width: 420px) {
+  .brand-tag {
+    display: none;
+  }
+  .brand-name {
+    font-size: 15px;
+  }
+}
+
+.header-spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------- Acceso al perfil ---------- */
+.profile-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  padding: 0;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid rgba(196, 181, 253, 0.24);
+  background: rgba(27, 24, 46, 0.64);
+  transition: background 0.2s ease, transform 0.18s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.profile-chip:hover {
+  background: rgba(167, 139, 250, 0.18);
+  border-color: rgba(196, 181, 253, 0.5);
+  transform: translateY(-1px);
+}
+
+.profile-chip:active {
+  transform: scale(0.94);
+}
+
+.profile-chip.is-active {
+  border-color: rgba(196, 181, 253, 0.75);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.28);
+}
+
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.profile-avatar.img {
+  object-fit: cover;
+}
+
+.profile-avatar.text {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #f4f0ff;
+  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+}
+
+.profile-avatar.icon ion-icon {
+  font-size: 24px;
+  color: var(--app-text-muted);
+}
+
+/* ---------- Desktop: hueco para la sidebar fija ---------- */
+@media (min-width: 768px) {
+  .app-header {
+    left: 118px;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 960px) {
+  .app-header {
+    left: 96px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}

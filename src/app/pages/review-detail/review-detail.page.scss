@@ -1,0 +1,75 @@
+.page {
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.detail-card {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+}
+
+.detail-card header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+}
+
+.detail-card h1,
+.detail-card p {
+  margin: 0;
+}
+
+.detail-card header span {
+  min-width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(167, 139, 250, 0.18);
+  border: 1px solid rgba(196, 181, 253, 0.22);
+  color: #f4f0ff;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.subtitle,
+.game-line small {
+  color: var(--app-text-soft);
+}
+
+.game-line {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  border-radius: 12px;
+  background: rgba(42, 37, 70, 0.5);
+}
+
+.comment {
+  color: var(--app-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 12px;
+  }
+
+  .detail-card header {
+    grid-template-columns: 1fr;
+  }
+}

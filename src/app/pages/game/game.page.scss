@@ -1,0 +1,182 @@
+.page {
+  padding: 20px;
+  padding-bottom: 28px;
+}
+
+.hero-card,
+.game-overview,
+.review-card,
+.reviews-list {
+  padding: 18px;
+}
+
+.hero-card,
+.error-card {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.game-overview {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+  gap: 22px;
+}
+
+.cover-panel img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+}
+
+.info-panel h1,
+.review-header h2,
+.section-head h2 {
+  margin: 0;
+}
+
+.description {
+  color: var(--app-text-muted);
+  line-height: 1.6;
+  margin: 14px 0 0;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.meta-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(42, 37, 70, 0.58);
+  border: 1px solid rgba(196, 181, 253, 0.14);
+}
+
+.meta-card span {
+  display: block;
+  color: var(--app-text-soft);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.detail-list p {
+  margin: 0 0 10px;
+  color: var(--app-text-muted);
+  line-height: 1.5;
+}
+
+.detail-list a {
+  color: #ddd6fe;
+}
+
+.review-card,
+.reviews-list {
+  margin-top: 18px;
+}
+
+.review-header p:last-child {
+  color: var(--app-text-muted);
+}
+
+.form-item {
+  --background: rgba(27, 24, 46, 0.64);
+  --border-color: rgba(196, 181, 253, 0.16);
+  --padding-start: 10px;
+  --inner-padding-end: 10px;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.rating-block {
+  margin-top: 14px;
+}
+
+.rating-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rating-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.feedback {
+  margin: 12px 0 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-head span {
+  min-width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(167, 139, 250, 0.18);
+  color: #ddd6fe;
+  font-weight: 700;
+}
+
+.stored-review {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(42, 37, 70, 0.58);
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  margin-bottom: 12px;
+}
+
+.stored-review:last-child {
+  margin-bottom: 0;
+}
+
+.stored-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.stored-top h3 {
+  margin: 0 0 4px;
+}
+
+.stored-top p,
+.stored-review > p,
+.stored-review span {
+  color: var(--app-text-muted);
+}
+
+.stored-review span {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .game-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

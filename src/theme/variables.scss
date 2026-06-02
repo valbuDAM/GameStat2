@@ -1,0 +1,30 @@
+:root {
+  --ion-color-primary: #a78bfa;
+  --ion-color-primary-rgb: 167, 139, 250;
+  --ion-color-primary-contrast: #10091f;
+  --ion-color-secondary: #c084fc;
+  --ion-color-secondary-rgb: 192, 132, 252;
+  --ion-color-tertiary: #38bdf8;
+  --ion-color-success: #22c55e;
+  --ion-color-warning: #f59e0b;
+  --ion-color-danger: #ef4444;
+  --ion-font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ion-background-color: #080712;
+  --ion-text-color: #f6f3ff;
+
+  --app-bg: #080712;
+  --app-bg-soft: #100f1d;
+  --app-surface: rgba(20, 18, 35, 0.88);
+  --app-surface-strong: rgba(27, 24, 46, 0.94);
+  --app-surface-muted: rgba(42, 37, 70, 0.72);
+  --app-border: rgba(196, 181, 253, 0.18);
+  --app-border-strong: rgba(196, 181, 253, 0.32);
+  --app-text: #f6f3ff;
+  --app-text-muted: #c9c0df;
+  --app-text-soft: #a99dbc;
+  --app-primary: #a78bfa;
+  --app-primary-strong: #8b5cf6;
+  --app-primary-soft: rgba(167, 139, 250, 0.16);
+  --app-secondary: #38bdf8;
+  --app-shadow: 0 22px 56px rgba(3, 2, 10, 0.48);
+}

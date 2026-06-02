@@ -1,0 +1,294 @@
+/* ===================================================================
+   Navegación responsive.
+
+   Arquitectura:
+   - MOBILE (< 768px): ion-tab-bar slot="bottom" se queda en su posicion
+     nativa Ionic (barra inferior fija). Restyle: glassmorphism oscuro,
+     iconos+labels, safe-area-inset-bottom para iPhone.
+   - DESKTOP (>= 768px): la misma ion-tab-bar pasa a position:fixed a la
+     izquierda, en formato sidebar vertical, y el ion-router-outlet de
+     ion-tabs recibe margin-left para que el contenido no quede tapado.
+
+   Top bar (<app-header>):
+   - Se renderiza una vez en TabsPage, encima de ion-tabs.
+   - Es position:fixed con altura 56px + safe-area-inset-top.
+   - Empujamos ion-tabs hacia abajo con la misma cantidad para que
+     ninguna pagina hija quede tapada por el header.
+
+   Notas:
+   - No hay display:none ni duplicacion de componentes: una sola tab-bar.
+   - Se usa ::ng-deep porque los selectores deben atravesar la encapsulacion
+     de Angular hasta los elementos internos de ion-tabs / ion-tab-bar.
+   - Sin !important en las reglas mobile-first: Ionic ya posiciona la barra
+     en el bottom por defecto para slot="bottom". Solo se usa !important
+     en el desktop override para ganar a las reglas internas de Ionic que
+     mantienen la barra horizontal.
+   =================================================================== */
+
+/* Altura del header global, reutilizable */
+$header-height: 56px;
+
+/* Empuja toda la zona /tabs por debajo del header fijo Y reduce su alto en
+   la misma cantidad. Si solo aplicas `top` sobre un elemento position:relative
+   (que es el caso de ion-tabs), el bloque se desplaza pero conserva su 100%
+   de alto y desborda por debajo del viewport, escondiendo el footer del chat
+   tras la barra de tareas. */
+::ng-deep ion-tabs {
+  top: calc(#{$header-height} + env(safe-area-inset-top)) !important;
+  height: calc(100% - #{$header-height} - env(safe-area-inset-top)) !important;
+}
+
+/* ---------------- MOBILE-FIRST: bottom navigation bar ---------------- */
+
+::ng-deep ion-tab-bar {
+  /* Estructura */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+  gap: 0;
+  height: calc(60px + env(safe-area-inset-bottom));
+  padding: 4px 6px env(safe-area-inset-bottom);
+  border-top: 1px solid rgba(196, 181, 253, 0.18);
+  border-bottom: 0;
+
+  /* Glassmorphism oscuro premium */
+  background: linear-gradient(180deg, rgba(15, 13, 29, 0.82), rgba(10, 8, 18, 0.94));
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+  box-shadow: 0 -8px 28px rgba(3, 2, 10, 0.45);
+
+  overflow: hidden;
+}
+
+::ng-deep ion-tab-button {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 60px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+
+  margin: 4px 2px;
+  padding: 4px 2px;
+  border-radius: 12px;
+
+  --color: var(--app-text-soft);
+  --color-selected: #f4f0ff;
+  background: transparent;
+  cursor: pointer;
+
+  position: relative;
+  overflow: hidden;
+  transition: background 0.22s ease, color 0.22s ease, transform 0.18s ease;
+}
+
+::ng-deep ion-tab-button ion-icon {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--app-text-soft);
+  transition: transform 0.22s ease, color 0.22s ease;
+}
+
+::ng-deep ion-tab-button ion-label {
+  display: block;
+  max-width: 100%;
+  font-size: 10.5px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--app-text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.22s ease, font-weight 0.22s ease;
+}
+
+::ng-deep ion-tab-button:active {
+  transform: scale(0.94);
+}
+
+/* Estado activo */
+::ng-deep ion-tab-button.tab-selected,
+::ng-deep ion-tab-button[aria-selected='true'] {
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.22), rgba(139, 92, 246, 0.10));
+}
+
+::ng-deep ion-tab-button.tab-selected ion-icon,
+::ng-deep ion-tab-button[aria-selected='true'] ion-icon {
+  color: #ddd6fe;
+  transform: translateY(-2px) scale(1.08);
+}
+
+::ng-deep ion-tab-button.tab-selected ion-label,
+::ng-deep ion-tab-button[aria-selected='true'] ion-label {
+  color: #f4f0ff;
+  font-weight: 700;
+}
+
+/* Indicador superior animado (estilo app nativa moderna) */
+::ng-deep ion-tab-button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 28px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #c4b5fd, #8b5cf6);
+  opacity: 0;
+  transform: translateX(-50%) scaleX(0.4);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+::ng-deep ion-tab-button.tab-selected::after,
+::ng-deep ion-tab-button[aria-selected='true']::after {
+  opacity: 1;
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* IMPORTANTE: el outlet de ion-tabs se pinta encima del sidebar fijo en
+   desktop. Para que los clicks lleguen tanto al contenido como a la barra,
+   el outlet en si no recibe eventos pero sus hijos (las paginas) si. Este
+   patron es el mismo que tenia la version original con sidebar. */
+::ng-deep ion-tabs > ion-router-outlet {
+  pointer-events: none;
+}
+
+::ng-deep ion-tabs > ion-router-outlet > * {
+  pointer-events: auto;
+}
+
+
+/* ---------------- DESKTOP / TABLET >= 768px: sidebar izquierda ---------------- */
+
+@media (min-width: 768px) {
+  /* Reserva el ancho de la sidebar para el contenido */
+  ::ng-deep ion-tabs > ion-router-outlet {
+    margin-left: 118px !important;
+    width: calc(100% - 118px) !important;
+  }
+
+  ::ng-deep ion-tab-bar {
+    /* Saca la barra del flujo y la fija a la izquierda, ocupando TODO el
+       alto del viewport (incluida la franja del header con el logo). */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    z-index: 100 !important;
+
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+
+    width: 118px !important;
+    padding: calc(#{$header-height} + env(safe-area-inset-top) + 14px) 10px calc(18px + env(safe-area-inset-bottom)) !important;
+
+    border-right: 1px solid var(--app-border) !important;
+    border-top: 0 !important;
+
+    background: linear-gradient(180deg, rgba(15, 13, 29, 0.98), rgba(12, 10, 22, 0.96)) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: 16px 0 36px rgba(3, 2, 10, 0.3) !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: none !important;
+  }
+
+  ::ng-deep ion-tab-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  ::ng-deep ion-tab-button {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    padding: 7px 6px 8px !important;
+    margin: 0 !important;
+    gap: 3px !important;
+    border-radius: 10px !important;
+  }
+
+  ::ng-deep ion-tab-button ion-icon {
+    font-size: 20px !important;
+  }
+
+  ::ng-deep ion-tab-button ion-label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  /* En desktop sustituimos el indicador superior por una barrita lateral */
+  ::ng-deep ion-tab-button::after {
+    left: 6px !important;
+    top: 12px !important;
+    bottom: 12px !important;
+    width: 4px !important;
+    height: auto !important;
+    transform: scaleY(0.5) !important;
+    background: linear-gradient(180deg, #c4b5fd, #8b5cf6) !important;
+  }
+
+  ::ng-deep ion-tab-button.tab-selected::after,
+  ::ng-deep ion-tab-button[aria-selected='true']::after {
+    transform: scaleY(1) !important;
+  }
+
+  ::ng-deep ion-tab-button.tab-selected,
+  ::ng-deep ion-tab-button[aria-selected='true'] {
+    background: linear-gradient(180deg, rgba(167, 139, 250, 0.22), rgba(139, 92, 246, 0.12)) !important;
+    border: 1px solid rgba(196, 181, 253, 0.22) !important;
+  }
+
+  ::ng-deep ion-tab-button:hover {
+    background: rgba(167, 139, 250, 0.10) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  ::ng-deep ion-tab-button:hover ion-icon {
+    transform: translateY(-2px) scale(1.06) !important;
+  }
+}
+
+/* Pantallas muy estrechas: reduce el ancho de la sidebar para tablets pequenas
+   y deja sitio para mas contenido. Solo aplica en modo desktop. */
+@media (min-width: 768px) and (max-width: 960px) {
+  ::ng-deep ion-tabs > ion-router-outlet {
+    margin-left: 96px !important;
+    width: calc(100% - 96px) !important;
+  }
+
+  ::ng-deep ion-tab-bar {
+    width: 96px !important;
+    padding: 12px 8px !important;
+  }
+
+  ::ng-deep ion-tab-button {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    padding: 6px 4px 7px !important;
+  }
+
+  ::ng-deep ion-tab-button ion-label {
+    font-size: 11px !important;
+  }
+}

@@ -1,0 +1,457 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+body {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(139, 92, 246, 0.2), transparent 32%),
+    radial-gradient(circle at 82% 12%, rgba(56, 189, 248, 0.1), transparent 28%),
+    linear-gradient(180deg, var(--app-bg) 0%, #0d0b19 46%, #090814 100%);
+  color: var(--app-text);
+  font-family: var(--ion-font-family);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+ion-content {
+  --background: transparent;
+  color: var(--app-text);
+}
+
+.page-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.surface-card {
+  background: linear-gradient(180deg, var(--app-surface-strong), var(--app-surface));
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  box-shadow: var(--app-shadow);
+  color: var(--app-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--app-text);
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.12;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 1.35rem;
+  line-height: 1.22;
+  font-weight: 750;
+}
+
+h3 {
+  font-size: 1rem;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+p {
+  color: var(--app-text-muted);
+}
+
+.eyebrow {
+  color: var(--app-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.muted,
+.helper,
+.empty {
+  color: var(--app-text-soft);
+}
+
+/* ===================================================================
+   Theming global de componentes Ionic para GameStat.
+   Fondo oscuro + texto claro consistente con la paleta de la app.
+
+   IMPORTANTE: en Ionic 8, ion-input / ion-textarea / ion-button montan
+   el control nativo dentro de su Shadow DOM. Los selectores externos
+   ("ion-textarea textarea") NO atraviesan el shadow DOM. Hay que usar
+   ::part(native) o variables CSS (--background, --color), porque las
+   custom properties SI cruzan el shadow boundary.
+   =================================================================== */
+
+/* ---------- Items que envuelven inputs ---------- */
+ion-item {
+  --background: rgba(27, 24, 46, 0.64);
+  --background-hover: rgba(35, 31, 58, 0.82);
+  --background-activated: rgba(35, 31, 58, 0.82);
+  --background-focused: rgba(35, 31, 58, 0.82);
+  --color: var(--app-text);
+  --border-color: var(--app-border);
+  --border-radius: 10px;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  --highlight-color-focused: var(--ion-color-primary);
+  margin-bottom: 10px;
+}
+
+ion-item ion-label {
+  --color: var(--app-text-muted);
+  color: var(--app-text-muted) !important;
+}
+
+ion-item ion-label[position='stacked'] {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--app-text-soft) !important;
+}
+
+/* ---------- Inputs ---------- */
+ion-input {
+  --background: rgba(27, 24, 46, 0.72);
+  --color: var(--app-text) !important;
+  --placeholder-color: var(--app-text-soft) !important;
+  --placeholder-opacity: 0.9;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --border-radius: 10px;
+  border-radius: 10px;
+  color: var(--app-text);
+  caret-color: var(--ion-color-primary);
+}
+
+/* Dentro de un ion-item el input no necesita su propio fondo */
+ion-item ion-input {
+  --background: transparent;
+}
+
+/* ---------- Textareas (BUGFIX: texto blanco sobre blanco) ---------- */
+ion-textarea {
+  --background: rgba(27, 24, 46, 0.72);
+  --color: var(--app-text) !important;
+  --placeholder-color: var(--app-text-soft) !important;
+  --placeholder-opacity: 0.9;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --border-radius: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: rgba(27, 24, 46, 0.72);
+  color: var(--app-text);
+  caret-color: var(--ion-color-primary);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+ion-textarea:focus-within {
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.18);
+}
+
+/* Dentro de un ion-item el textarea hereda fondo del item */
+ion-item ion-textarea {
+  --background: transparent;
+  border: none;
+  background: transparent;
+}
+
+/* Fallback para Ionic legacy textarea (no shadow-DOM) */
+.native-textarea,
+.native-input {
+  color: var(--app-text) !important;
+  caret-color: var(--ion-color-primary) !important;
+}
+
+.native-textarea::placeholder,
+.native-input::placeholder {
+  color: var(--app-text-soft) !important;
+  opacity: 0.9 !important;
+}
+
+/* ---------- Ranges ---------- */
+ion-range {
+  --bar-background: rgba(196, 181, 253, 0.24);
+  --bar-background-active: var(--ion-color-primary);
+  --knob-background: var(--ion-color-primary);
+  --knob-size: 22px;
+  --pin-background: var(--ion-color-primary);
+  --pin-color: #04130d;
+  padding: 8px 0;
+}
+
+/* ---------- Botones ----------
+   Usamos !important en las custom props porque algunas paginas viejas
+   (p.ej. home.page.scss) usaban ::ng-deep con !important. Sin esto los
+   nuevos estilos no ganarian especificidad sobre los antiguos. */
+ion-button {
+  --border-radius: 10px !important;
+  --padding-start: 18px !important;
+  --padding-end: 18px !important;
+  --padding-top: 14px !important;
+  --padding-bottom: 14px !important;
+  --box-shadow: 0 6px 18px rgba(2, 6, 23, 0.35);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* Primario / default */
+ion-button[color='primary'],
+ion-button:not([color]):not([fill='clear']):not([fill='outline']) {
+  --background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 62%, #7c3aed 100%) !important;
+  --background-hover: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 62%, #8b5cf6 100%) !important;
+  --background-activated: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%) !important;
+  --background-focused: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 100%) !important;
+  --color: #10091f !important;
+  --color-hover: #10091f !important;
+}
+
+ion-button[color='secondary'] {
+  --background: linear-gradient(135deg, #38bdf8, #818cf8) !important;
+  --background-hover: linear-gradient(135deg, #7dd3fc, #a5b4fc) !important;
+  --background-activated: linear-gradient(135deg, #0284c7, #6366f1) !important;
+  --color: #f8fafc !important;
+}
+
+ion-button[color='danger'] {
+  --background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  --background-hover: linear-gradient(135deg, #f87171, #ef4444) !important;
+  --color: #fff !important;
+}
+
+ion-button[color='medium'] {
+  --background: rgba(55, 49, 85, 0.72) !important;
+  --background-hover: rgba(69, 61, 105, 0.86) !important;
+  --color: var(--app-text) !important;
+}
+
+/* Variantes fill */
+ion-button[fill='outline'] {
+  --border-color: var(--app-border-strong) !important;
+  --border-width: 1px !important;
+  --background: rgba(27, 24, 46, 0.5) !important;
+  --background-hover: rgba(var(--ion-color-primary-rgb), 0.12) !important;
+  --color: var(--app-text) !important;
+  --box-shadow: none !important;
+}
+
+ion-button[fill='outline'][color='primary'] {
+  --border-color: rgba(var(--ion-color-primary-rgb), 0.72) !important;
+  --color: #ddd6fe !important;
+}
+
+ion-button[fill='outline'][color='danger'] {
+  --border-color: rgba(239, 68, 68, 0.6) !important;
+  --color: #fca5a5 !important;
+  --background-hover: rgba(239, 68, 68, 0.12) !important;
+}
+
+ion-button[fill='clear'] {
+  --background: transparent !important;
+  --background-hover: rgba(196, 181, 253, 0.12) !important;
+  --color: var(--app-text-muted) !important;
+  --box-shadow: none !important;
+  --padding-top: 8px !important;
+  --padding-bottom: 8px !important;
+}
+
+ion-button[fill='clear'][color='primary'] {
+  --color: #ddd6fe !important;
+}
+
+ion-button[fill='clear'][color='danger'] {
+  --color: #fca5a5 !important;
+}
+
+ion-button[disabled],
+ion-button.button-disabled {
+  --background: rgba(55, 49, 85, 0.44) !important;
+  --color: rgba(246, 243, 255, 0.58) !important;
+  --box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+ion-button[shape='round'] {
+  --border-radius: 999px !important;
+}
+
+ion-button[size='small'] {
+  --padding-top: 8px !important;
+  --padding-bottom: 8px !important;
+  --padding-start: 12px !important;
+  --padding-end: 12px !important;
+  font-size: 12px;
+}
+
+/* ---------- Segments ---------- */
+ion-segment {
+  --background: rgba(20, 18, 35, 0.74);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+ion-segment-button {
+  --background-checked: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  --color: var(--app-text-soft);
+  --color-checked: #10091f;
+  --indicator-color: transparent;
+  --border-radius: 10px;
+  text-transform: none;
+  font-weight: 600;
+  min-height: 38px;
+}
+
+/* ---------- Lists / avatares ---------- */
+ion-list {
+  background: transparent;
+}
+
+ion-avatar {
+  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+}
+
+/* ---------- Toasts ---------- */
+ion-toast {
+  --border-radius: 12px;
+  --box-shadow: 0 12px 32px rgba(2, 6, 23, 0.45);
+}
+
+/* ---------- Alert (popups) ---------- */
+ion-alert .alert-wrapper {
+  --background: #141223;
+  --color: var(--app-text);
+}
+
+ion-alert .alert-input {
+  color: var(--app-text) !important;
+  background: rgba(27, 24, 46, 0.82) !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+  border: 1px solid var(--app-border-strong) !important;
+}
+
+ion-alert .alert-input::placeholder {
+  color: var(--app-text-soft) !important;
+}
+
+ion-alert .alert-button {
+  color: #ddd6fe !important;
+}
+
+ion-alert .alert-checkbox-label,
+ion-alert .alert-radio-label,
+ion-alert .alert-message {
+  color: var(--app-text) !important;
+}
+
+ion-alert .alert-checkbox-group,
+ion-alert .alert-radio-group {
+  border-top: 1px solid var(--app-border) !important;
+  border-bottom: 1px solid var(--app-border) !important;
+}
+
+ion-alert .alert-checkbox-icon {
+  border-color: rgba(var(--ion-color-primary-rgb), 0.72) !important;
+}
+
+ion-alert [aria-checked='true'] .alert-checkbox-icon {
+  background: var(--ion-color-primary) !important;
+  border-color: var(--ion-color-primary) !important;
+}
+
+/* ---------- Autocomplete de juegos ---------- */
+.favorite-game-field,
+.game-field {
+  position: relative;
+  min-width: 0;
+}
+
+.game-suggestions {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid rgba(196, 181, 253, 0.28);
+  border-radius: 10px;
+  background: rgb(20, 18, 35);
+  box-shadow: 0 18px 36px rgba(3, 2, 10, 0.48);
+}
+
+.game-suggestion {
+  display: grid;
+  width: 100%;
+  gap: 3px;
+  padding: 11px 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(196, 181, 253, 0.16);
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.game-suggestion:hover,
+.game-suggestion:focus-visible {
+  outline: none;
+  background: rgba(167, 139, 250, 0.16);
+}
+
+.game-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.game-meta {
+  color: var(--app-text-soft);
+  font-size: 12px;
+}
+
+.suggestion-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  color: var(--app-text-muted);
+  font-size: 13px;
+}
+
+.suggestion-state ion-spinner {
+  width: 18px;
+  height: 18px;
+}
+
+.suggestion-state.error {
+  color: #fecaca;
+}

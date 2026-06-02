@@ -1,0 +1,119 @@
+.games-content::part(scroll) {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page {
+  padding: 20px;
+  padding-bottom: 24px;
+}
+
+.page > * {
+  margin-bottom: 16px;
+}
+
+.page > *:last-child {
+  margin-bottom: 0;
+}
+
+.search-card,
+.loading-state,
+.empty-state,
+.details-card {
+  padding: 18px;
+}
+
+.search-card h1 {
+  margin: 0 0 8px;
+}
+
+.search-card p {
+  margin: 0;
+  color: var(--app-text-muted);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-body {
+  padding: 16px 16px 8px;
+}
+
+.game-body h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.meta-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: var(--app-text-soft);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 0 12px 12px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.loading-state,
+.empty-state {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+@media (max-width: 1024px) {
+  .games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions ion-button {
+    flex: 1 1 100%;
+  }
+
+  .cover {
+    border-radius: 12px 12px 0 0;
+  }
+}

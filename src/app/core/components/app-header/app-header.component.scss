@@ -1,0 +1,151 @@
+/* ===================================================================
+   Header superior fijo de GameStat.
+   - Posicion: fixed top, full width, z-index alto (por encima del
+     sidebar desktop y del bottom-bar mobile).
+   - Respeta safe-area-inset-top para notch iOS.
+   - Estilo glassmorphism oscuro consistente con la paleta de la app.
+   =================================================================== */
+
+:host {
+  display: contents;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  height: calc(56px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 16px 0;
+
+  background: linear-gradient(180deg, rgba(15, 13, 29, 0.92), rgba(10, 8, 18, 0.78));
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+  border-bottom: 1px solid rgba(196, 181, 253, 0.16);
+  box-shadow: 0 8px 24px rgba(3, 2, 10, 0.32);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--app-text);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.brand-mark {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 60%, #38bdf8 100%);
+  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.38);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-mark__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f4f0ff;
+  box-shadow: 0 0 0 3px rgba(244, 240, 255, 0.18);
+}
+
+.brand-name {
+  font-size: 17px;
+  line-height: 1;
+  background: linear-gradient(90deg, #f4f0ff, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 3px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.profile-link:hover {
+  background: rgba(167, 139, 250, 0.10);
+  border-color: rgba(196, 181, 253, 0.24);
+}
+
+.profile-link:active {
+  transform: scale(0.96);
+}
+
+.profile-link.is-active {
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.22), rgba(139, 92, 246, 0.12));
+  border-color: rgba(196, 181, 253, 0.4);
+}
+
+.profile-link:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 2px;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+  color: #10091f;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.4);
+}
+
+.avatar--icon {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.28), rgba(56, 189, 248, 0.18));
+  color: #f4f0ff;
+}
+
+.avatar--icon ion-icon {
+  font-size: 18px;
+}
+
+/* Pantallas muy pequenas: reduce padding lateral y oculta el wordmark */
+@media (max-width: 360px) {
+  .app-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+}
