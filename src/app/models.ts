@@ -18,7 +18,6 @@ export interface ReviewItem {
   gameId: number | null;
   game: string;
   title: string;
-  subtitle: string;
   rating: number;
   comment: string;
   author: string;

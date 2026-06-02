@@ -1,10 +1,39 @@
+/* =========================================================
+   Chat detail – layout integrado con el tema de la app.
+   ========================================================= */
+
+ion-content {
+  --background: transparent;
+}
+
+/* Header y footer con el mismo cristal oscuro que el resto de la app */
+ion-header ion-toolbar,
+ion-footer ion-toolbar {
+  --background: rgba(16, 15, 29, 0.96);
+  --color: var(--app-text);
+  --border-color: var(--app-border);
+}
+
+ion-header ion-toolbar {
+  --border-width: 0 0 1px 0;
+}
+
+ion-footer ion-toolbar {
+  --padding-top: 8px;
+  --padding-bottom: 10px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --border-width: 1px 0 0 0;
+}
+
 .chat-shell {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  max-width: 900px;
+  gap: 6px;
+  padding: 18px 16px 24px;
+  max-width: 880px;
   margin: 0 auto;
+  min-height: 100%;
 }
 
 .title-row {
@@ -16,7 +45,11 @@
 .title-text {
   display: flex;
   flex-direction: column;
-  line-height: 1;
+  line-height: 1.15;
+}
+
+.title-text strong {
+  font-size: 0.95rem;
 }
 
 .title-text small {
@@ -24,6 +57,7 @@
   color: var(--app-text-soft);
 }
 
+/* Avatares */
 .avatar-circle {
   width: 36px;
   height: 36px;
@@ -35,122 +69,234 @@
   color: #fff;
   font-weight: 700;
   font-size: 12px;
+  flex-shrink: 0;
 }
 
 .avatar-circle.small {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   font-size: 11px;
 }
 
+/* =========================================================
+   Mensajes
+   ========================================================= */
 .message {
-  display: grid;
-  grid-template-columns: 36px 1fr;
+  display: flex;
   gap: 8px;
-  align-items: flex-start;
+  align-items: flex-end;
+  margin-top: 6px;
+  width: 100%;
+}
+
+.message + .message {
+  margin-top: 4px;
 }
 
 .message.own {
-  grid-template-columns: 1fr 36px;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
 }
 
-.message.own .bubble {
-  background: rgba(99, 102, 241, 0.35);
-  text-align: right;
-}
-
-.message.own .avatar-circle {
-  grid-column: 2;
-}
-
-.message.own .bubble {
-  grid-column: 1;
+.message .avatar-circle,
+.message .msg-avatar {
+  flex-shrink: 0;
 }
 
 .bubble {
-  background: rgba(42, 37, 70, 0.72);
-  border: 1px solid rgba(196, 181, 253, 0.12);
-  border-radius: 14px;
-  padding: 8px 12px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(42, 37, 70, 0.92), rgba(34, 30, 56, 0.92));
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  border-radius: 16px;
+  border-bottom-left-radius: 6px;
+  padding: 8px 14px 10px;
   color: var(--app-text);
-  max-width: 80%;
+  max-width: 78%;
+  box-shadow: 0 6px 18px rgba(3, 2, 10, 0.28);
+  text-align: left;
+}
+
+.message.own .bubble {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.55), rgba(99, 102, 241, 0.42));
+  border-color: rgba(196, 181, 253, 0.32);
+  border-radius: 16px;
+  border-bottom-right-radius: 6px;
 }
 
 .bubble header {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  align-items: baseline;
+  gap: 12px;
   font-size: 11px;
   color: var(--app-text-soft);
   margin-bottom: 4px;
+}
+
+.message.own .bubble header {
+  color: rgba(245, 240, 255, 0.72);
 }
 
 .sender-name {
   color: #ddd6fe;
   cursor: pointer;
   text-decoration: none;
+  font-weight: 600;
+}
+
+.message.own .sender-name {
+  color: #f5f0ff;
 }
 
 .bubble p {
   margin: 0;
   white-space: pre-wrap;
   word-wrap: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+  font-size: 0.95rem;
 }
 
+.bubble .edit-btn {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: rgba(20, 18, 35, 0.55);
+  border: 1px solid rgba(196, 181, 253, 0.22);
+  border-radius: 999px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--app-text-soft);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  padding: 0;
+  font-size: 13px;
+}
+
+.bubble:hover .edit-btn,
+.bubble:focus-within .edit-btn {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.bubble .edited {
+  font-style: italic;
+  margin-left: 4px;
+  opacity: 0.75;
+}
+
+/* =========================================================
+   Composer (barra de envio)
+   ========================================================= */
 .composer {
   display: flex;
   gap: 8px;
-  align-items: center;
-  padding: 6px 10px 6px 18px;
+  align-items: flex-end;
   width: 100%;
   margin: 0;
+  padding: 4px 6px;
+  background: linear-gradient(180deg, rgba(42, 37, 70, 0.55), rgba(36, 32, 60, 0.55));
+  border: 1px solid var(--app-border);
+  border-radius: 22px;
+  box-shadow: inset 0 0 0 1px rgba(20, 18, 35, 0.4);
+}
+
+.composer ion-textarea {
+  --background: transparent;
+  --color: var(--app-text);
+  --placeholder-color: var(--app-text-soft);
+  --placeholder-opacity: 0.85;
+  --padding-start: 14px;
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  flex: 1;
+  min-width: 0;
+  max-height: 140px;
+  border-radius: 18px;
+  font-size: 0.95rem;
 }
 
 .composer ion-input {
-  --background: rgba(27, 24, 46, 0.72);
+  --background: transparent;
   --color: var(--app-text);
-  --padding-start: 12px;
+  --padding-start: 14px;
   --padding-end: 12px;
   border-radius: 999px;
   flex: 1;
   min-width: 0;
 }
 
-.composer ion-textarea {
-  --background: rgba(27, 24, 46, 0.72);
-  --color: var(--app-text);
-  --padding-start: 12px;
-  --padding-end: 12px;
-  border-radius: 18px;
-  flex: 1;
-  min-width: 0;
-  max-height: 140px;
+.composer ion-button {
+  --background: #8b5cf6;
+  --background-hover: #a78bfa;
+  --background-activated: #7c3aed;
+  --color: #ffffff;
+  --box-shadow: 0 6px 16px rgba(139, 92, 246, 0.45);
+  --border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  margin: 0 4px 2px 0;
+  flex-shrink: 0;
 }
 
+.composer ion-button[disabled] {
+  opacity: 0.55;
+  --box-shadow: none;
+}
+
+/* Estados informativos */
 .typing {
   font-size: 12px;
   color: var(--app-text-soft);
   font-style: italic;
-  margin: 4px 0 0;
+  margin: 6px 0 0;
   padding-left: 4px;
   min-height: 16px;
 }
 
-/* Offsets para compensar la sidebar fija en desktop/tablet.
-   En mobile la navegacion es una bottom-bar, no se aplica margin-left. */
+.empty {
+  text-align: center;
+  color: var(--app-text-soft);
+  margin: auto;
+  padding: 32px 16px;
+  border: 1px dashed var(--app-border);
+  border-radius: 14px;
+  background: rgba(20, 18, 35, 0.4);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 14px;
+}
+
+.loading.older {
+  padding: 6px;
+}
+
+.error {
+  text-align: center;
+  margin: 0 0 6px;
+}
+
+/* =========================================================
+   Offsets para compensar la sidebar fija en desktop/tablet.
+   En mobile la navegacion es una bottom-bar, no se aplica.
+   ========================================================= */
 @media (min-width: 768px) {
-  ::ng-deep ion-header {
+  ::ng-deep ion-header,
+  ::ng-deep ion-content {
     margin-left: 130px;
     width: calc(100% - 130px);
   }
 
   ::ng-deep ion-header ion-buttons[slot="start"] {
     margin-right: auto !important;
-  }
-
-  ::ng-deep ion-content {
-    margin-left: 130px;
-    width: calc(100% - 130px);
   }
 
   ion-footer ion-toolbar {
@@ -162,11 +308,7 @@
 }
 
 @media (min-width: 768px) and (max-width: 960px) {
-  ::ng-deep ion-header {
-    margin-left: 100px;
-    width: calc(100% - 100px);
-  }
-
+  ::ng-deep ion-header,
   ::ng-deep ion-content {
     margin-left: 100px;
     width: calc(100% - 100px);
@@ -178,57 +320,18 @@
   }
 }
 
-.empty {
-  text-align: center;
-  color: var(--app-text-soft);
-  margin-top: 24px;
+@media (max-width: 480px) {
+  .chat-shell {
+    padding: 12px 10px 18px;
+  }
+  .bubble {
+    max-width: 86%;
+  }
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  padding: 14px;
-}
-
-.error {
-  text-align: center;
-  margin: 0;
-}
-
-.bubble {
-  position: relative;
-}
-
-.bubble .edit-btn {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  background: transparent;
-  border: none;
-  color: var(--app-text-soft);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  padding: 2px;
-  font-size: 14px;
-}
-
-.bubble:hover .edit-btn,
-.bubble:focus-within .edit-btn {
-  opacity: 0.85;
-}
-
-.bubble .edited {
-  font-style: italic;
-  margin-left: 4px;
-  opacity: 0.75;
-}
-
-.loading.older {
-  padding: 6px;
-}
-
-/* ---------- Modal de gestión de grupo ---------- */
+/* =========================================================
+   Modal de gestion de grupo (sin cambios funcionales)
+   ========================================================= */
 .group-modal-backdrop {
   position: fixed;
   inset: 0;

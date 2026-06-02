@@ -129,7 +129,7 @@ import {
             (action)="refresh()">
           </app-empty-state>
 
-          <ion-list lines="none" class="posts" *ngIf="social.posts().length > 0">
+          <ion-list lines="none" class="posts app-scroll" *ngIf="social.posts().length > 0">
             <article
               #postCard
               class="post-card"

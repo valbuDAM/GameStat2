@@ -6,13 +6,16 @@ create table if not exists public.game_reviews (
   rawg_id bigint,
   game text not null,
   title text not null,
-  subtitle text not null default '',
   comment text not null,
   rating integer not null check (rating between 1 and 10),
   author text not null,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
 );
+
+-- Migracion: eliminar columna subtitle si existe de versiones previas.
+alter table public.game_reviews
+  drop column if exists subtitle;
 
 -- Columnas que pueden faltar si la tabla ya existia (idempotente).
 alter table public.game_reviews

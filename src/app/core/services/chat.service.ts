@@ -96,7 +96,7 @@ export class ChatService {
         }
       }
       this.wasOnline = online;
-    });
+    }, { allowSignalWrites: true });
 
     if (this.supabaseService.isConfigured) {
       void this.bootstrap();

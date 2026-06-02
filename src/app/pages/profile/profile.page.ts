@@ -1,46 +1,31 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AlertController,
-  IonAvatar,
   IonButton,
   IonBadge,
   IonContent,
   IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
   IonSpinner,
   IonSegment,
   IonSegmentButton,
   IonText,
-  IonTextarea,
   IonToast,
+  ModalController,
   ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   chatbubbleEllipsesOutline,
+  createOutline,
+  logOutOutline,
   personAddOutline,
   personRemoveOutline,
   star,
   trashOutline
 } from 'ionicons/icons';
-import {
-  Subject,
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  finalize,
-  map,
-  of,
-  switchMap,
-  tap
-} from 'rxjs';
 
 import { RawgGame } from '../../core/models/rawg.models';
 import { FollowStats, ProfileSummary, ReviewItem, SocialPost, UserProfile } from '../../models';
@@ -50,6 +35,8 @@ import { FollowService } from '../../core/services/follow.service';
 import { GamesService } from '../../core/services/games.service';
 import { ProfileService } from '../../core/services/profile.service';
 import { SocialService } from '../../core/services/social.service';
+import { ProfileEditModalComponent } from '../../shared/components/profile-edit-modal/profile-edit-modal.component';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 
 type ActivityEntry =
   | (SocialPost & { kind: 'post' })
@@ -61,21 +48,16 @@ type ActivityEntry =
     CommonModule,
     FormsModule,
     RouterLink,
-    IonAvatar,
     IonButton,
     IonBadge,
     IonContent,
     IonIcon,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonList,
     IonSpinner,
     IonSegment,
     IonSegmentButton,
     IonText,
-    IonTextarea,
-    IonToast
+    IonToast,
+    UserAvatarComponent
   ],
   styleUrls: ['./profile.page.scss'],
   template: `
@@ -83,9 +65,7 @@ type ActivityEntry =
       <div class="page-shell page">
 
         <section class="surface-card profile-card" *ngIf="profile() as p">
-          <ion-avatar class="avatar-circle big">
-            <span>{{ p.avatar }}</span>
-          </ion-avatar>
+          <app-user-avatar size="xl" [name]="p.name" [avatar]="p.avatar"></app-user-avatar>
           <h1>{{ p.name }}</h1>
           <p class="muted" *ngIf="isMine()">{{ p.email }}</p>
           <ion-text color="medium">Juego favorito: {{ p.favoriteGame || '—' }}</ion-text>
@@ -100,6 +80,17 @@ type ActivityEntry =
             </button>
             <div><strong>{{ userPosts().length }}</strong><span>Posts</span></div>
             <div><strong>{{ userReviews().length }}</strong><span>Reviews</span></div>
+          </div>
+
+          <div class="actions" *ngIf="isMine()">
+            <ion-button fill="solid" color="primary" (click)="openEditModal()">
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Editar perfil
+            </ion-button>
+            <ion-button fill="outline" color="danger" (click)="logout()">
+              <ion-icon slot="start" name="log-out-outline"></ion-icon>
+              Cerrar sesion
+            </ion-button>
           </div>
 
           <div class="actions" *ngIf="!isMine()">
@@ -139,7 +130,7 @@ type ActivityEntry =
           <ul class="follow-list">
             <li *ngFor="let u of followListItems(); trackBy: trackByFollow">
               <a [routerLink]="['/tabs/profile', u.id]" class="follow-row">
-                <ion-avatar class="avatar-circle small"><span>{{ u.avatar || initials(u.name) }}</span></ion-avatar>
+                <app-user-avatar size="sm" [name]="u.name" [avatar]="u.avatar"></app-user-avatar>
                 <span class="follow-info">
                   <strong>{{ u.name }}</strong>
                   <small *ngIf="u.bio">{{ u.bio }}</small>
@@ -156,59 +147,6 @@ type ActivityEntry =
             [disabled]="followListLoading()">
             Cargar más
           </ion-button>
-        </section>
-
-        <section class="surface-card edit-card" *ngIf="isMine() && profile() as p">
-          <h2>Editar perfil</h2>
-          <ion-item>
-            <ion-label position="stacked">Nombre</ion-label>
-            <ion-input [(ngModel)]="editName"></ion-input>
-          </ion-item>
-          <div class="favorite-game-field">
-            <ion-item>
-              <ion-label position="stacked">Juego favorito</ion-label>
-              <ion-input
-                [(ngModel)]="editFavoriteGame"
-                autocomplete="off"
-                (ngModelChange)="onFavoriteGameInput($event)">
-              </ion-input>
-            </ion-item>
-
-            <div class="game-suggestions" *ngIf="showFavoriteGameSuggestions()">
-              <button
-                type="button"
-                class="game-suggestion"
-                *ngFor="let game of favoriteGameSuggestions; trackBy: trackByGameId"
-                (click)="selectFavoriteGame(game)">
-                <span class="game-title">{{ game.name }}</span>
-                <span class="game-meta">{{ game.released || 'Sin fecha' }}</span>
-              </button>
-
-              <div class="suggestion-state" *ngIf="favoriteGameSearchLoading">
-                <ion-spinner name="crescent"></ion-spinner>
-                <span>Buscando juegos...</span>
-              </div>
-
-              <div class="suggestion-state" *ngIf="!favoriteGameSearchLoading && !favoriteGameSuggestions.length && !favoriteGameSearchError">
-                No hay juegos con ese nombre.
-              </div>
-
-              <div class="suggestion-state error" *ngIf="favoriteGameSearchError">
-                {{ favoriteGameSearchError }}
-              </div>
-            </div>
-          </div>
-          <ion-item>
-            <ion-label position="stacked">Bio</ion-label>
-            <ion-textarea [(ngModel)]="editBio" autoGrow="true"></ion-textarea>
-          </ion-item>
-          <ion-button expand="block" [disabled]="saving" (click)="save()">
-            {{ saving ? 'Guardando...' : 'Guardar cambios' }}
-          </ion-button>
-          <ion-button expand="block" fill="outline" color="danger" (click)="logout()">
-            Cerrar sesion
-          </ion-button>
-          <ion-text color="danger" *ngIf="error()">{{ error() }}</ion-text>
         </section>
 
         <section class="surface-card activity-card" *ngIf="activity().length">
@@ -313,9 +251,6 @@ type ActivityEntry =
   `
 })
 export class ProfilePage implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly favoriteGameSearchTerms$ = new Subject<string>();
-
   readonly profile = signal<UserProfile | null>(null);
   readonly userPosts = signal<SocialPost[]>([]);
   readonly userReviews = signal<ReviewItem[]>([]);
@@ -346,17 +281,8 @@ export class ProfilePage implements OnInit {
     return !!me && me.id === this.profile()?.id;
   });
 
-  editName = '';
-  editFavoriteGame = '';
-  originalFavoriteGame = '';
-  editBio = '';
   saving = false;
   showSavedToast = false;
-  selectedFavoriteGame: RawgGame | null = null;
-  favoriteGameSuggestions: RawgGame[] = [];
-  favoriteGameSearchLoading = false;
-  favoriteGameSearchError = '';
-  favoriteGameSuggestionsOpen = false;
 
   constructor(
     private readonly auth: AuthService,
@@ -368,25 +294,18 @@ export class ProfilePage implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly toastCtrl: ToastController,
-    private readonly alertCtrl: AlertController
+    private readonly alertCtrl: AlertController,
+    private readonly modalCtrl: ModalController
   ) {
-    addIcons({ personAddOutline, personRemoveOutline, chatbubbleEllipsesOutline, star, trashOutline });
-
-    // Sincroniza el formulario cuando cambia el perfil mostrado
-    effect(() => {
-      const p = this.profile();
-      if (p && this.isMine()) {
-        this.editName = p.name;
-        this.editFavoriteGame = p.favoriteGame;
-        this.originalFavoriteGame = p.favoriteGame;
-        this.selectedFavoriteGame = null;
-        this.favoriteGameSuggestions = [];
-        this.favoriteGameSuggestionsOpen = false;
-        this.editBio = p.bio;
-      }
+    addIcons({
+      personAddOutline,
+      personRemoveOutline,
+      chatbubbleEllipsesOutline,
+      createOutline,
+      logOutOutline,
+      star,
+      trashOutline
     });
-
-    this.setupFavoriteGameSearch();
   }
 
   async ngOnInit(): Promise<void> {
@@ -394,33 +313,6 @@ export class ProfilePage implements OnInit {
       const userId = params.get('userId');
       await this.loadProfile(userId);
     });
-  }
-
-  onFavoriteGameInput(value: string): void {
-    const cleanValue = value.trim();
-
-    if (this.selectedFavoriteGame?.name !== cleanValue) {
-      this.selectedFavoriteGame = null;
-    }
-
-    this.favoriteGameSuggestionsOpen = cleanValue.length >= 2;
-    this.favoriteGameSearchTerms$.next(cleanValue);
-  }
-
-  selectFavoriteGame(game: RawgGame): void {
-    this.selectedFavoriteGame = game;
-    this.editFavoriteGame = game.name;
-    this.favoriteGameSuggestions = [];
-    this.favoriteGameSearchError = '';
-    this.favoriteGameSuggestionsOpen = false;
-  }
-
-  showFavoriteGameSuggestions(): boolean {
-    return (
-      this.favoriteGameSuggestionsOpen &&
-      Boolean(this.editFavoriteGame.trim()) &&
-      !this.selectedFavoriteGame
-    );
   }
 
   trackByGameId(_: number, game: RawgGame): number {
@@ -591,33 +483,26 @@ export class ProfilePage implements OnInit {
   }
 
   async save(): Promise<void> {
+    // Conservado por compatibilidad; ahora guardar se hace desde el modal.
+    await this.openEditModal();
+  }
+
+  async openEditModal(): Promise<void> {
     const current = this.profile();
     if (!current || !this.isMine()) return;
 
-    const cleanFavoriteGame = this.editFavoriteGame.trim();
-    const favoriteGameChanged =
-      cleanFavoriteGame.toLowerCase() !== this.originalFavoriteGame.trim().toLowerCase();
-
-    if (favoriteGameChanged && cleanFavoriteGame && !this.selectedFavoriteGame) {
-      this.error.set('Selecciona el juego favorito del desplegable para confirmar que existe.');
-      return;
-    }
-
-    this.saving = true;
-    this.error.set('');
-    try {
-      await this.auth.updateProfile({
-        name: this.editName,
-        favoriteGame: this.editFavoriteGame,
-        bio: this.editBio
-      });
+    const modal = await this.modalCtrl.create({
+      component: ProfileEditModalComponent,
+      componentProps: { profile: current },
+      backdropDismiss: false,
+      cssClass: 'profile-edit-modal'
+    });
+    await modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (role === 'save' && data?.saved) {
       const updated = this.auth.currentUser();
       if (updated) this.profile.set(updated);
       this.showSavedToast = true;
-    } catch (e) {
-      this.error.set(e instanceof Error ? e.message : 'No se pudo guardar.');
-    } finally {
-      this.saving = false;
     }
   }
 
@@ -633,46 +518,5 @@ export class ProfilePage implements OnInit {
   private async toast(message: string, color: 'success' | 'danger' = 'success'): Promise<void> {
     const t = await this.toastCtrl.create({ message, duration: 2200, color, position: 'top' });
     await t.present();
-  }
-
-  private setupFavoriteGameSearch(): void {
-    this.favoriteGameSearchTerms$
-      .pipe(
-        map((term) => term.trim()),
-        debounceTime(300),
-        distinctUntilChanged(),
-        tap((term) => {
-          this.favoriteGameSearchError = '';
-
-          if (term.length < 2) {
-            this.favoriteGameSuggestions = [];
-            this.favoriteGameSearchLoading = false;
-            this.favoriteGameSuggestionsOpen = false;
-            return;
-          }
-
-          this.favoriteGameSearchLoading = true;
-        }),
-        switchMap((term) => {
-          if (term.length < 2) {
-            return of([]);
-          }
-
-          return this.gamesService.searchGames(term, 1, 8).pipe(
-            map((page) => page.items),
-            catchError((error: Error) => {
-              this.favoriteGameSearchError = error.message;
-              return of([]);
-            }),
-            finalize(() => {
-              this.favoriteGameSearchLoading = false;
-            })
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((games) => {
-        this.favoriteGameSuggestions = games;
-      });
   }
 }

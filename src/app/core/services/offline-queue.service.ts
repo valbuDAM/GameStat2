@@ -44,7 +44,7 @@ export class OfflineQueueService {
       if (this.network.online() && this.hydrated && this.pending().length > 0) {
         void this.flush();
       }
-    });
+    }, { allowSignalWrites: true });
   }
 
   /** Registra un ejecutor para un tipo de acción. */

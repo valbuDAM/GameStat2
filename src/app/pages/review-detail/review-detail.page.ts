@@ -26,7 +26,6 @@ import { ReviewStatsCardComponent } from '../../shared/components/review-stats-c
           <header>
             <div>
               <h1>{{ r.title }}</h1>
-              <p class="subtitle" *ngIf="r.subtitle">{{ r.subtitle }}</p>
             </div>
             <span>{{ r.rating }}/10</span>
           </header>

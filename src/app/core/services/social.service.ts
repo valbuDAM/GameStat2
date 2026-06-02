@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, effect, signal } from '@angular/core';
 import { RealtimeChannel } from '@supabase/supabase-js';
 
 import { ReviewItem, ReviewStats, SocialComment, SocialPost, UserReviewStats } from '../../models';
@@ -16,7 +16,6 @@ interface ReviewRow {
   rawg_id: number | null;
   game: string;
   title: string;
-  subtitle: string;
   comment: string;
   rating: number;
   author: string;
@@ -74,7 +73,6 @@ export interface CreateReviewPayload {
   gameId: number | null;
   game: string;
   title: string;
-  subtitle: string;
   comment: string;
   rating: number;
   author: string;
@@ -111,6 +109,31 @@ export class SocialService {
     if (this.supabaseService.isConfigured) {
       void this.bootstrap();
     }
+
+    // Recargar feed/reviews cuando cambia el usuario autenticado.
+    // El RPC `get_user_feed` filtra por auth.uid(), por lo que sin sesion
+    // devuelve vacio. Si bootstrap se ejecuta antes del login, los posts
+    // nunca aparecen hasta que reaccionemos al cambio de sesion.
+    let lastUserId: string | null | undefined = undefined;
+    effect(() => {
+      const userId = this.auth.currentUser()?.id ?? null;
+      if (userId === lastUserId) return;
+      lastUserId = userId;
+
+      if (!this.supabaseService.isConfigured) return;
+
+      if (!userId) {
+        // Logout: limpiar estado local.
+        this.posts.set([]);
+        this.reviews.set([]);
+        this.hasMore.set(true);
+        return;
+      }
+
+      // Login (o cambio de cuenta): recargar feed y reviews.
+      void this.loadFeed().catch((e) => console.error('feed:', e));
+      void this.loadReviews().catch((e) => console.error('reviews:', e));
+    }, { allowSignalWrites: true });
   }
 
   // -------------------------------------------------------------------
@@ -267,7 +290,7 @@ export class SocialService {
 
     const { data, error } = await client
       .from('game_reviews')
-      .select('id, user_id, rawg_id, game, title, subtitle, comment, rating, author, created_at')
+      .select('id, user_id, rawg_id, game, title, comment, rating, author, created_at')
       .order('created_at', { ascending: false });
 
     if (error) throw new Error(this.mapError(error.message, 'game_reviews'));
@@ -286,12 +309,11 @@ export class SocialService {
         rawg_id: normalized.gameId,
         game: normalized.game,
         title: normalized.title,
-        subtitle: normalized.subtitle,
         comment: normalized.comment,
         rating: normalized.rating,
         author: normalized.author
       })
-      .select('id, user_id, rawg_id, game, title, subtitle, comment, rating, author, created_at')
+      .select('id, user_id, rawg_id, game, title, comment, rating, author, created_at')
       .single<ReviewRow>();
 
     if (error) throw new Error(this.mapError(error.message, 'game_reviews'));
@@ -319,7 +341,7 @@ export class SocialService {
     const client = this.supabaseService.assertConfigured();
     const { data, error } = await client
       .from('game_reviews')
-      .select('id, user_id, rawg_id, game, title, subtitle, comment, rating, author, created_at')
+      .select('id, user_id, rawg_id, game, title, comment, rating, author, created_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
@@ -336,7 +358,7 @@ export class SocialService {
     const client = this.supabaseService.assertConfigured();
     const { data, error } = await client
       .from('game_reviews')
-      .select('id, user_id, rawg_id, game, title, subtitle, comment, rating, author, created_at')
+      .select('id, user_id, rawg_id, game, title, comment, rating, author, created_at')
       .eq('id', reviewId)
       .single<ReviewRow>();
 
@@ -704,7 +726,6 @@ export class SocialService {
       gameId: row.rawg_id,
       game: row.game,
       title: row.title,
-      subtitle: row.subtitle,
       rating: row.rating,
       comment: row.comment,
       author: row.author,
@@ -736,7 +757,6 @@ export class SocialService {
       gameId: p.gameId,
       game: p.game.trim(),
       title: p.title.trim(),
-      subtitle: p.subtitle.trim(),
       comment: p.comment.trim(),
       rating: p.rating,
       author: p.author.trim()

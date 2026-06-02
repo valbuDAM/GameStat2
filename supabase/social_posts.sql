@@ -196,14 +196,7 @@ as $$
             where l.post_id = p.id and l.user_id = (select uid from viewer)) as viewer_liked
   from public.social_posts p
   join public.profiles prof on prof.id = p.user_id
-  where (
-        p.user_id = (select uid from viewer)
-     or p.user_id in (
-        select followed_id from public.follows
-         where follower_id = (select uid from viewer)
-     )
-  )
-  and (before_ts is null or p.created_at < before_ts)
+  where (before_ts is null or p.created_at < before_ts)
   order by p.created_at desc
   limit greatest(1, least(coalesce(page_limit, 20), 50));
 $$;

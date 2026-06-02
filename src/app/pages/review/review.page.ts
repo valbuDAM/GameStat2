@@ -94,28 +94,25 @@ import { RatingStarsComponent } from '../../shared';
               <ion-label position="stacked">Titulo</ion-label>
               <ion-input [(ngModel)]="form.title" placeholder="Tu titular para la review"></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="stacked">Subtitulo</ion-label>
-              <ion-input [(ngModel)]="form.subtitle" placeholder="Resumen corto de tu opinion"></ion-input>
-            </ion-item>
           </div>
-          <div class="review-bottom-row">
-            <ion-item>
-              <ion-label position="stacked">Comentario</ion-label>
-              <ion-textarea [(ngModel)]="form.comment" autoGrow="true"></ion-textarea>
-            </ion-item>
 
-            <div class="range-wrap">
-              <ion-text>Valoración: {{ form.rating }}/10</ion-text>
-              <app-rating-stars
-                [value]="form.rating"
-                [readonly]="false"
-                [showValue]="true"
-                [max]="10"
-                (valueChange)="form.rating = $event">
-              </app-rating-stars>
-            </div>
+          <div class="rating-row">
+            <ion-text class="rating-label">Valoración: {{ form.rating }}/10</ion-text>
+            <app-rating-stars
+              [value]="form.rating"
+              [readonly]="false"
+              [showValue]="false"
+              [max]="10"
+              (valueChange)="form.rating = $event">
+            </app-rating-stars>
+          </div>
 
+          <ion-item class="comment-field">
+            <ion-label position="stacked">Comentario</ion-label>
+            <ion-textarea [(ngModel)]="form.comment" autoGrow="true" rows="3"></ion-textarea>
+          </ion-item>
+
+          <div class="submit-row">
             <ion-button [disabled]="saving" (click)="addReview()">
               {{ saving ? 'Guardando...' : 'Guardar review' }}
             </ion-button>
@@ -135,7 +132,7 @@ import { RatingStarsComponent } from '../../shared';
             <span>{{ social.reviews().length }}</span>
           </header>
 
-          <div class="review-scroll">
+          <div class="review-scroll app-scroll">
             <ion-list class="review-list">
               <ion-item
                 lines="none"
@@ -145,7 +142,6 @@ import { RatingStarsComponent } from '../../shared';
                 <ion-label>
                   <h2>{{ review.game }} - {{ review.rating }}/10</h2>
                   <h3>{{ review.title }}</h3>
-                  <p *ngIf="review.subtitle">{{ review.subtitle }}</p>
                   <p>{{ review.comment }}</p>
                   <p>{{ review.author }} - {{ review.createdAt }}</p>
                 </ion-label>
@@ -164,7 +160,6 @@ export class ReviewPage {
   form = {
     game: '',
     title: '',
-    subtitle: '',
     comment: '',
     rating: 7
   };
@@ -240,7 +235,6 @@ export class ReviewPage {
         gameId: this.selectedGame.id,
         game: this.selectedGame.name,
         title: this.form.title,
-        subtitle: this.form.subtitle,
         comment: this.form.comment,
         rating: this.form.rating,
         author: user.name
@@ -249,7 +243,6 @@ export class ReviewPage {
       this.form = {
         game: '',
         title: '',
-        subtitle: '',
         comment: '',
         rating: 7
       };
