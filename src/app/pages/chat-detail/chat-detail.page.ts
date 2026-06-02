@@ -13,7 +13,6 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AlertController,
-  IonAvatar,
   IonBackButton,
   IonButton,
   IonButtons,
@@ -51,6 +50,7 @@ import { ChatService } from '../../core/services/chat.service';
 import { ProfileService } from '../../core/services/profile.service';
 import { PlatformService } from '../../core/services/platform.service';
 import { TimeAgoPipe } from '../../shared';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 
 @Component({
   standalone: true,
@@ -58,7 +58,6 @@ import { TimeAgoPipe } from '../../shared';
     CommonModule,
     FormsModule,
     RouterLink,
-    IonAvatar,
     IonBackButton,
     IonButton,
     IonButtons,
@@ -76,7 +75,8 @@ import { TimeAgoPipe } from '../../shared';
     IonTextarea,
     IonTitle,
     IonToolbar,
-    TimeAgoPipe
+    TimeAgoPipe,
+    UserAvatarComponent
   ],
   styleUrls: ['./chat-detail.page.scss'],
   template: `
@@ -87,9 +87,7 @@ import { TimeAgoPipe } from '../../shared';
         </ion-buttons>
         <ion-title>
           <div class="title-row" *ngIf="conversation() as conv">
-            <ion-avatar class="avatar-circle">
-              <span>{{ conv.avatar }}</span>
-            </ion-avatar>
+            <app-user-avatar size="sm" [name]="conv.title" [avatar]="conv.avatar"></app-user-avatar>
             <div class="title-text">
               <strong>{{ conv.title }}</strong>
               <small>
@@ -124,9 +122,12 @@ import { TimeAgoPipe } from '../../shared';
           *ngFor="let msg of messages(); trackBy: trackById"
           class="message"
           [class.own]="msg.senderId === currentUserId()">
-          <ion-avatar class="avatar-circle small">
-            <span>{{ msg.senderAvatar }}</span>
-          </ion-avatar>
+          <app-user-avatar
+            class="msg-avatar"
+            size="sm"
+            [name]="msg.senderName"
+            [avatar]="msg.senderAvatar">
+          </app-user-avatar>
           <div class="bubble">
             <header>
               <strong [routerLink]="['/profile', msg.senderId]" class="sender-name">
@@ -207,9 +208,7 @@ import { TimeAgoPipe } from '../../shared';
 
         <ion-list lines="none" class="members-list">
           <ion-item *ngFor="let p of conversation()?.participants || []">
-            <ion-avatar slot="start" class="avatar-circle small">
-              <span>{{ p.avatar }}</span>
-            </ion-avatar>
+            <app-user-avatar slot="start" size="sm" [name]="p.name" [avatar]="p.avatar"></app-user-avatar>
             <ion-label>
               <h3>
                 {{ p.name }}
@@ -268,9 +267,7 @@ import { TimeAgoPipe } from '../../shared';
               button
               *ngFor="let u of addMemberResults(); trackBy: trackByUser"
               (click)="addMember(u)">
-              <ion-avatar slot="start" class="avatar-circle small">
-                <span>{{ initials(u.name) }}</span>
-              </ion-avatar>
+              <app-user-avatar slot="start" size="sm" [name]="u.name" [avatar]="u.avatar || ''"></app-user-avatar>
               <ion-label>{{ u.name }}</ion-label>
               <ion-icon slot="end" name="add-circle-outline" color="primary"></ion-icon>
             </ion-item>

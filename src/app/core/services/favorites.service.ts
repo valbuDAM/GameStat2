@@ -32,7 +32,7 @@ export class FavoritesService {
         this.loadingIdsState.set(new Set());
         this.errorState.set(null);
       }
-    });
+    }, { allowSignalWrites: true });
   }
 
   isFavorite(gameId: number): boolean {

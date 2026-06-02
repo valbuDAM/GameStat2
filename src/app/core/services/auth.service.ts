@@ -317,7 +317,7 @@ export class AuthService {
   }
 
   private getEmailRedirectUrl(): string {
-    return 'https://gamestat-tfg.vercel.app/landing';
+    return 'https://game-stat2.vercel.app/login';
   }
 
   private mapAuthError(error: AuthError): string {

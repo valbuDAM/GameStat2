@@ -3,7 +3,6 @@ import { Component, OnInit, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {
-  IonAvatar,
   IonBadge,
   IonButton,
   IonCheckbox,
@@ -33,6 +32,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
 import { ProfileService } from '../../core/services/profile.service';
 import { EmptyStateComponent } from '../../shared';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 
 type Tab = 'private' | 'group';
 
@@ -43,7 +43,7 @@ type Tab = 'private' | 'group';
     FormsModule,
     RouterLink,
     EmptyStateComponent,
-    IonAvatar,
+    UserAvatarComponent,
     IonBadge,
     IonButton,
     IonCheckbox,
@@ -101,9 +101,7 @@ type Tab = 'private' | 'group';
               *ngFor="let conv of filteredConversations(); trackBy: trackByConv"
               button
               [routerLink]="['/tabs/social/chat', conv.id]">
-              <ion-avatar slot="start" class="avatar-circle">
-                <span>{{ conv.avatar || initials(conv.title) }}</span>
-              </ion-avatar>
+              <app-user-avatar slot="start" size="md" [name]="conv.title" [avatar]="conv.avatar"></app-user-avatar>
               <ion-label>
                 <h2>{{ conv.title }}</h2>
                 <p>
@@ -150,9 +148,7 @@ type Tab = 'private' | 'group';
 
           <ion-list lines="none" class="users-list" *ngIf="!loadingUsers()">
             <ion-item *ngFor="let u of users(); trackBy: trackByUser" button (click)="startPrivate(u)">
-              <ion-avatar slot="start" class="avatar-circle">
-                <span>{{ u.avatar }}</span>
-              </ion-avatar>
+              <app-user-avatar slot="start" size="md" [name]="u.name" [avatar]="u.avatar"></app-user-avatar>
               <ion-label>
                 <h3>{{ u.name }}</h3>
                 <p>{{ u.favoriteGame || 'Sin juego favorito' }}</p>

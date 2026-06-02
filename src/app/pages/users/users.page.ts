@@ -3,7 +3,6 @@ import { Component, OnInit, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  IonAvatar,
   IonButton,
   IonContent,
   IonIcon,
@@ -24,6 +23,7 @@ import { ChatService } from '../../core/services/chat.service';
 import { FollowService } from '../../core/services/follow.service';
 import { ProfileService } from '../../core/services/profile.service';
 import { EmptyStateComponent } from '../../shared';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 
 @Component({
   standalone: true,
@@ -31,7 +31,7 @@ import { EmptyStateComponent } from '../../shared';
     CommonModule,
     FormsModule,
     EmptyStateComponent,
-    IonAvatar,
+    UserAvatarComponent,
     IonButton,
     IonContent,
     IonIcon,
@@ -79,9 +79,7 @@ import { EmptyStateComponent } from '../../shared';
               *ngFor="let user of users(); trackBy: trackByUserId"
               button
               (click)="openProfile(user)">
-              <ion-avatar slot="start" class="avatar-circle">
-                <span>{{ user.avatar }}</span>
-              </ion-avatar>
+              <app-user-avatar slot="start" size="md" [name]="user.name" [avatar]="user.avatar"></app-user-avatar>
               <ion-label>
                 <h2>{{ user.name }}</h2>
                 <p>{{ user.email }}</p>

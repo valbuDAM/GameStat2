@@ -55,9 +55,9 @@ begin
     (u_raul,  'El evento nuevo deja recompensas bastante buenas.');
 
   -- Reviews
-  insert into public.game_reviews (user_id, rawg_id, game, title, subtitle, comment, rating, author) values
-    (u_iker, 323229, 'Valorant', 'Shooter muy fino', 'Ideal para jugar competitivo con colegas', 'Buen ritmo competitivo y partidas muy agiles.', 9, 'Iker Demo'),
-    (u_claud, null,  'EA FC 26', 'Online bastante mejor', 'Sigue dependiendo del meta', 'Mejor online, aunque aun depende mucho del meta.', 8, 'Claudia')
+  insert into public.game_reviews (user_id, rawg_id, game, title, comment, rating, author) values
+    (u_iker, 323229, 'Valorant', 'Shooter muy fino', 'Buen ritmo competitivo y partidas muy agiles.', 9, 'Iker Demo'),
+    (u_claud, null,  'EA FC 26', 'Online bastante mejor', 'Mejor online, aunque aun depende mucho del meta.', 8, 'Claudia')
   on conflict do nothing;
 
   -- Conversacion grupal

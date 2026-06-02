@@ -305,7 +305,6 @@ export class GamePage implements OnInit {
         gameId: this.game.id,
         game: this.game.name,
         title: `Review de ${this.game.name}`,
-        subtitle: '',
         comment: this.form.comment,
         rating: this.form.rating,
         author: user.name
